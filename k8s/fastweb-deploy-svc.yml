@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-webserver
+spec:
+  selector:
+    matchLabels:
+      app: fastapi-webrtc
+  template:
+    metadata:
+      labels:
+        app: fastapi-webrtc
+  spec:
+    containers:
+    - name: webrtc-container
+      image: gcr.io/soldesk-khw-cicd/fastweb
+      ports:
+      - containerPort: 8000
+---
+# webrtc-svc
+kind: Service
+apiVersion: v1
+metadata:
+  name: fastapi-webrtc-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: fastapi-webrtc
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
